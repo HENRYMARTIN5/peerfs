@@ -8,6 +8,7 @@ BASE_IP = "192.168.1.%i"
 CHECKPORT = 18623
 SERVERPORT = 18623
 IPS = []
+activenodes = []
 
 def get_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -21,7 +22,6 @@ def get_ip():
         s.close()
     return IP
 
-print("localhost = " + get_ip())
 
 class Threader:
     def __init__(self, threads=30):
@@ -69,7 +69,7 @@ def connect(hostname, port):
         result = sock.connect_ex((hostname, port))
     with threader.print_lock:
         if result == 0:
-            stderr.write(f"[{perf_counter() - start:.5f}] Found {hostname}\n")
+            stderr.write(f"[{perf_counter() - start:.5f}] PeerFS port found at {hostname}\n")
             IPS.append(hostname)
 
 
@@ -78,11 +78,12 @@ for i in range(255):
     threader.append(connect, BASE_IP%i, CHECKPORT)
 threader.start()
 threader.join()
-print(f"[{perf_counter() - start:.5f}] Done searching")
-print(IPS)
+print(f"[{perf_counter() - start:.5f}] Done searching for ips")
 for ip in IPS:
     try:
         r = requests.get(f"http://{ip}:{SERVERPORT}/fetchstats")
-        print(r.text)
+        print(f"[{perf_counter() - start:.5f}] Found an active node at " + ip + "!")
+        activenodes.append(ip)
     except:
-        print(f"{ip} is not running a node.")
+        print(f"[{perf_counter() - start:.5f}] {ip} is not running a node.")
+

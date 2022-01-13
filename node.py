@@ -25,5 +25,10 @@ def fetchstats():
     # returns the host OS, CPU, and memory usage
     return "Host OS: " + platform.system() + "\n" + "CPU: " + str(psutil.cpu_percent()) + "%\n" + "Memory: " + str(psutil.virtual_memory().percent) + "%\n" + "Public IP: " + get_ip()
 
+@app.route('/nodes')
+def nodes():
+    with open("nodes.json", "r") as f:
+        return f.read()
+
 if __name__ == '__main__':
-    app.run(host="192.168.1.115", port=18623)
+    app.run(port=18623)
