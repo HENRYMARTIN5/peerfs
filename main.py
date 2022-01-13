@@ -1,6 +1,6 @@
 # PeerFS Filesystem Sharing Tool - Node
-import nodefinder
-import node
+import peerfs.nodefinder as nodefinder
+import peerfs.node as node
 import json
 import requests
 

@@ -2,12 +2,14 @@ from flask import Flask
 import platform
 import psutil
 import socket
+import json
+from os import walk
+
 app = Flask(__name__)
 
 def get_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
-        # doesn't even have to be reachable
         s.connect(('10.255.255.255', 1))
         IP = s.getsockname()[0]
     except Exception:
@@ -29,6 +31,21 @@ def fetchstats():
 def nodes():
     with open("nodes.json", "r") as f:
         return f.read()
+
+@app.route('/filestash')
+def filestash():
+    with open("filestash.json", "r") as f:
+        return f.read()
+
+@app.route('/file/<path:filename>')
+def file(filename):
+    with open("filestash.json", "r") as f:
+        filestash = json.loads(f.read())
+        if filename in filestash:
+            with open("./stash/" + filename, "r") as f:
+                return f.read()
+        else:
+            return "File not found"
 
 if __name__ == '__main__':
     app.run(port=18623)
