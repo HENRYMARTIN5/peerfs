@@ -5,7 +5,7 @@ from time import sleep
 import socket, requests
 
 BASE_IP = "192.168.1.%i"
-CHECKPORT = 80
+CHECKPORT = 18623
 SERVERPORT = 18623
 IPS = []
 
@@ -80,9 +80,6 @@ threader.start()
 threader.join()
 print(f"[{perf_counter() - start:.5f}] Done searching")
 print(IPS)
-##############
-IPS.append("192.168.1.115")
-##############
 for ip in IPS:
     try:
         r = requests.get(f"http://{ip}:{SERVERPORT}/fetchstats")

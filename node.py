@@ -1,4 +1,3 @@
-# A simple flask app that responds to requests with the current node's IP address
 from flask import Flask
 import platform
 import psutil
@@ -11,7 +10,7 @@ def index():
 @app.route('/fetchstats')
 def fetchstats():
     # returns the host OS, CPU, and memory usage
-    return "Host OS: " + platform.system() + "\n" + "CPU: " + str(psutil.cpu_percent()) + "\n" + "Memory: " + str(psutil.virtual_memory().percent) + "%"
+    return "Host OS: " + platform.system() + "\n" + "CPU: " + str(psutil.cpu_percent()) + "%\n" + "Memory: " + str(psutil.virtual_memory().percent) + "%\n" + "Public IP: " + str(psutil.net_if_addrs()['eth0'][0][1])
 
 if __name__ == '__main__':
     app.run(host="192.168.1.115", port=18623)
