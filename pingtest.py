@@ -80,7 +80,9 @@ threader.start()
 threader.join()
 print(f"[{perf_counter() - start:.5f}] Done searching")
 print(IPS)
-
+##############
+IPS.append("192.168.1.115")
+##############
 for ip in IPS:
     try:
         r = requests.get(f"http://{ip}:{SERVERPORT}/fetchstats")
