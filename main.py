@@ -1,6 +1,6 @@
 # PeerFS Filesystem Sharing Tool - Node
 import peerfs.nodefinder as nodefinder
-import peerfs.node as node
+import peerfs.node
 import json
 import requests
 
@@ -12,6 +12,9 @@ fetchedNodes = []
 
 def fetchAndWriteNodes(ip):
     print(f"[{nodefinder.perf_counter() - nodefinder.start:.5f}] Attempting to fetch nodes from {ip}:18623")
+    if ip == peerfs.node.get_ip():
+        print(f"[{nodefinder.perf_counter() - nodefinder.start:.5f}] Failed - Own IP")
+        return "Failed. This is the node's ip."
     try:
         if not ip in fetchedNodes:
             r = requests.get(f"http://{ip}:18623/nodes")
@@ -44,7 +47,7 @@ def main():
         f.close()
     
     print(f"[{nodefinder.perf_counter() - nodefinder.start:.5f}] Starting PeerFS Node...")
-    node.app.run(host=nodefinder.get_ip(), port=18623)
+    peerfs.node.app.run(host=nodefinder.get_ip(), port=18623)
 
 
 if __name__ == "__main__":
