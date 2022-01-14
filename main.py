@@ -45,18 +45,19 @@ def nodeFinderDaemon():
                 print(f"[{nodefinder.perf_counter() - nodefinder.start:.5f}] Stopping NodeFinder...")
                 doNodeFinder = False
                 break
-            
-        if doNodeFinder:
-            for nodeIp in nodefinder.activenodes:
-                fetchAndWriteNodes(nodeIp)
-            for nodeIp in nodefinder.activenodes:
-                if nodeIp not in nodes:
-                    nodes.append(nodeIp)
-            for nodeIp in nodes:
-                fetchAndWriteNodes(nodeIp)
+            if doNodeFinder:
+                executeNodeFinder()
+
         time.sleep(60)
 
-
+def executeNodeFinder():   
+    for nodeIp in nodefinder.activenodes:
+        fetchAndWriteNodes(nodeIp)
+    for nodeIp in nodefinder.activenodes:
+        if nodeIp not in nodes:
+            nodes.append(nodeIp)
+    for nodeIp in nodes:
+        fetchAndWriteNodes(nodeIp)
 
 def main():
     print(f"[{nodefinder.perf_counter() - nodefinder.start:.5f}] Starting NodeFinder, press the \"x\" key within 5 seconds to cancel or press enter to skip delay...")
