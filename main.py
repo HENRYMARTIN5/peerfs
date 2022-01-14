@@ -19,7 +19,7 @@ def fetchAndWriteNodes(ip):
         print(f"[{nodefinder.perf_counter() - nodefinder.start:.5f}] Failed - Own IP")
     try:
         if not ip in fetchedNodes:
-            r = requests.get(f"http://{ip}:18623/nodes")
+            r = requests.get(f"http://{ip}:18623/nodes", timeout=5)
             jsonF = json.loads(r.text)
             for node in jsonF["nodes"]:
                 if node not in fetchedNodes:
