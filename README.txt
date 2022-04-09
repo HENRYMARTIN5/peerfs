@@ -1,4 +1,4 @@
-
+------- WORK IN PROGRESS, NO INSTALL INSTRUCTIONS YET -------
 
 PeerFS Idea:
 Every client that accesses the Peer to Peer File System will become a node, which will locally cache files, then send them to other peers / clients.
