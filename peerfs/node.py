@@ -3,8 +3,10 @@ import platform
 import psutil
 import socket
 import json
-from os import walk
+from os import walk, path
 import base64
+from werkzeug import secure_filename
+
 
 app = Flask(__name__)
 
@@ -25,7 +27,7 @@ def index():
 
 @app.route('/fetchstats')
 def fetchstats():
-    return "Host OS: " + platform.system() + "\n" + "CPU: " + str(psutil.cpu_percent()) + "%\n" + "Memory: " + str(psutil.virtual_memory().percent) + "%\n" + "Public IP: " + get_ip()
+    return "<!DOCTYPE html>\n<html>\n<head><title>PeerFS Node Stats</title></head><body>Host OS: " + platform.system() + "\n<br>" + "CPU: " + str(psutil.cpu_percent()) + "%\n<br>" + "Memory: " + str(psutil.virtual_memory().percent) + "%\n<br>" + "Public IP: " + get_ip() + "</body> </html>"
 
 @app.route('/nodes')
 def nodes():
@@ -47,9 +49,10 @@ def file(filename):
         else:
             return "File not found"
 
-@app.route('/requestAddFile', methods=['PUT'])
+@app.route('/requestAddFile', methods=['POST'])
 def requestAddFile():
     with open("filestash.json", "r") as f:
+        file = request.files['file']
         filestash = json.loads(f.read())
         if not request.headers.get('filename') in filestash.keys():
             filestash[request.headers.get('filename')] = {"id":request.headers.get('id')}
@@ -57,13 +60,14 @@ def requestAddFile():
                 f.write(json.dumps(filestash))
                 f.close()
             f.close()
-            with open("./stash/" + request.headers.get('filename'), "wb") as f:
-                f.write(base64.decode(request.headers.get('file')))
+            # Save file
+            filename = secure_filename(request.headers.get('filename'))
+            file.save(path.join("./stash/", filename))
         else:
             return "File already exists"
     return "File added"
 
-    
+
 
 if __name__ == '__main__':
     app.run(port=18623)

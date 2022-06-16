@@ -22,7 +22,6 @@ def get_ip():
         s.close()
     return IP
 
-
 class Threader:
     def __init__(self, threads=30):
         self.thread_lock = Lock()
@@ -59,7 +58,6 @@ class Threader:
         with self.thread_lock:
             self.threads.remove(thread)
 
-
 start = perf_counter()
 socket.setdefaulttimeout(0.1)
 
@@ -71,7 +69,6 @@ def connect(hostname, port):
         if result == 0:
             stderr.write(f"[{perf_counter() - start:.5f}] PeerFS port found at {hostname}\n")
             IPS.append(hostname)
-
 
 threader = Threader(10)
 for i in range(255):
@@ -86,4 +83,3 @@ for ip in IPS:
         activenodes.append(ip)
     except:
         print(f"[{perf_counter() - start:.5f}] {ip} is not running a node.")
-

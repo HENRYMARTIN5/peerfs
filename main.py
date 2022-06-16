@@ -12,8 +12,8 @@ nodesJson = json.loads(f.read())
 nodes = nodesJson["nodes"]
 fetchedNodes = []
 
-
 def fetchAndWriteNodes(ip):
+    """ Fetches and writes out nodes from connected nodes """
     print(f"[{nodefinder.perf_counter() - nodefinder.start:.5f}] Attempting to fetch nodes from {ip}:18623")
     if ip == peerfs.node.get_ip():
         print(f"[{nodefinder.perf_counter() - nodefinder.start:.5f}] Failed - Own IP")
@@ -34,7 +34,9 @@ def fetchAndWriteNodes(ip):
     except:
         print(f"[{nodefinder.perf_counter() - nodefinder.start:.5f}] Failed to fetch nodes from {ip}")
 
+
 def nodeFinderDaemon():
+    """ Finds nodes on user's local network """
     print(f"[{nodefinder.perf_counter() - nodefinder.start:.5f}] NodeFinder daemon started!")
     while True:
         print(f"[{nodefinder.perf_counter() - nodefinder.start:.5f}] Starting NodeFinder, press the \"x\" key within 5 seconds to cancel")
@@ -51,6 +53,7 @@ def nodeFinderDaemon():
         time.sleep(60)
 
 def executeNodeFinder():   
+    """ Finds nodes on user's local network """
     for nodeIp in nodefinder.activenodes:
         fetchAndWriteNodes(nodeIp)
     for nodeIp in nodefinder.activenodes:
@@ -59,7 +62,13 @@ def executeNodeFinder():
     for nodeIp in nodes:
         fetchAndWriteNodes(nodeIp)
 
+def serverDaemon():
+    """ Starts the server """
+    print(f"[{nodefinder.perf_counter() - nodefinder.start:.5f}] Starting Server daemon...")
+    peerfs.node.app.run(host=nodefinder.get_ip(), port=18623)
+
 def main():
+    """ Main function """
     print(f"[{nodefinder.perf_counter() - nodefinder.start:.5f}] Starting NodeFinder, press the \"x\" key within 5 seconds to cancel or press enter to skip delay...")
     starttime = nodefinder.perf_counter() - nodefinder.start
     curtime = nodefinder.perf_counter() - nodefinder.start
@@ -89,8 +98,10 @@ def main():
     print(f"[{nodefinder.perf_counter() - nodefinder.start:.5f}] Starting NodeFinder daemon...")
     NodeFinderDaemon = threading.Thread(target=nodeFinderDaemon)
     print(f"[{nodefinder.perf_counter() - nodefinder.start:.5f}] Starting PeerFS Node...")
-    peerfs.node.app.run(host=nodefinder.get_ip(), port=18623)
-
+    # Start the server:
+    print(f"[{nodefinder.perf_counter() - nodefinder.start:.5f}] Waiting for server startup...")
+    serverThread = threading.Thread(target=serverDaemon)
+    serverThread.start()
 
 if __name__ == "__main__":
     main()
