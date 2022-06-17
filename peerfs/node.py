@@ -1,14 +1,26 @@
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
 import platform
 import psutil
 import socket
 import json
 from os import walk, path
-import base64
 from werkzeug import secure_filename
+import requests
+import threading
 
 
 app = Flask(__name__)
+
+def sendFileOut(request):
+    # Daemon for sending file recursively
+    with open("nodes.json", "r") as f:
+        nodes = json.load(f)
+        id = request.headers.get('id')
+        filename = request.headers.get('filename')
+        with open(path.join("./stash/", filename), "rb") as f:
+            for node in nodes.nodes:
+                r = requests.post("http://"+node+":18623/requestAddFile", data=f.read(), headers={"id":id, "filename":filename})
+
 
 def get_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -41,13 +53,7 @@ def filestash():
 
 @app.route('/file/<path:filename>')
 def file(filename):
-    with open("filestash.json", "r") as f:
-        filestash = json.loads(f.read())
-        if filename in filestash:
-            with open("./stash/" + filename, "r") as f:
-                return f.read()
-        else:
-            return "File not found"
+    return send_from_directory('stash', filename)
 
 @app.route('/requestAddFile', methods=['POST'])
 def requestAddFile():
@@ -65,9 +71,9 @@ def requestAddFile():
             file.save(path.join("./stash/", filename))
         else:
             return "File already exists"
-    return "File added"
-
-
+    # Start a thread for uploading the file recursively to all nodes
+    uploaderThread = threading.Thread(target=sendFileOut, args=(request,), daemon=True)
+    return "File added, waiting for recursive upload..."
 
 if __name__ == '__main__':
     app.run(port=18623)
