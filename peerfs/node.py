@@ -8,7 +8,6 @@ from werkzeug import secure_filename
 import requests
 import threading
 
-
 app = Flask(__name__)
 
 def sendFileOut(request):

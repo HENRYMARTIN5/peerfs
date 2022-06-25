@@ -75,7 +75,7 @@ for i in range(255):
     threader.append(connect, BASE_IP%i, CHECKPORT)
 threader.start()
 threader.join()
-print(f"[{perf_counter() - start:.5f}] Done searching for ips")
+print(f"[{perf_counter() - start:.5f}] Done searching for IPs")
 for ip in IPS:
     try:
         r = requests.get(f"http://{ip}:{SERVERPORT}/fetchstats")
