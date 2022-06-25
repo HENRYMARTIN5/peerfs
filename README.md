@@ -1,4 +1,3 @@
-
 # PeerFS
 
 ## A simple peer-to-peer file sharing system
