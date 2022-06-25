@@ -67,7 +67,7 @@ def connect(hostname, port):
         result = sock.connect_ex((hostname, port))
     with threader.print_lock:
         if result == 0:
-            stderr.write(f"[{perf_counter() - start:.5f}] PeerFS port found at {hostname}\n")
+            stderr.write(f"[{perf_counter() - start:.5f}] PeerFS node found at {hostname}\n")
             IPS.append(hostname)
 
 threader = Threader(10)
