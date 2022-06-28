@@ -2,6 +2,8 @@
 
 ## A simple peer-to-peer file sharing system
 
+##### i swear this isn't napster please dont sue me please please please
+
 ### Installation
 
 Clone the repo and run the following commands:
