@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "peerfs"
+version = "0.1.0"
+authors = [
+  { name="Henry Martin", email="n3rdl0rd@proton.me" },
+]
+description = "Peer to Peer File Sharing Method"
+readme = "README.md"
+requires-python = ">=3.5"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "requests==2.28.1",
+    "betterlib==0.2.0",
+    "keyboard==0.13.5",
+    "psutil==5.9.4",
+    "flask==2.2.2"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/HENRYMARTIN5/peerfs"
+"Bug Tracker" = "https://github.com/HENRYMARTIN5/peerfs/issues"
