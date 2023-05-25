@@ -1,8 +1,19 @@
-# PeerFS
+```
+
+                        __     
+                       / _|    
+  _ __   ___  ___ _ __| |_ ___ 
+ | '_ \ / _ \/ _ \ '__|  _/ __|
+ | |_) |  __/  __/ |  | | \__ \
+ | .__/ \___|\___|_|  |_| |___/
+ | |                           
+ |_|                           
+
+```
 
 ## A simple peer-to-peer file sharing system
 
-##### i swear this isn't napster please dont sue me please please please
+##### i swear this isn't napster please dont sue me 
 
 ### Installation
 
